@@ -142,7 +142,7 @@ a{color:inherit}
 .son a{color:var(--altin)}
 
 /* ---------- mobil ve hareketi azalt: scroll bağı yok ---------- */
-@media (max-width:760px),(hover:none),(max-aspect-ratio:7/5),(prefers-reduced-motion:reduce){
+@media (max-width:760px),(hover:none),(prefers-reduced-motion:reduce){
   .sahne{height:auto}
   .sabit{position:relative;height:auto;display:block;padding:76px 16px 0}
   .pencere{height:auto;width:100%;max-width:420px;margin:0 auto;transform:none!important}
@@ -239,7 +239,7 @@ a{color:inherit}
       cubuk=document.getElementById('cubuk'), ipucu=document.getElementById('ipucu'),
       pencere=document.getElementById('pencere'),
       bolumler=[].slice.call(document.querySelectorAll('.bolum'));
-  var basit=matchMedia('(max-width:760px),(hover:none),(max-aspect-ratio:7/5),(prefers-reduced-motion:reduce)');
+  var basit=matchMedia('(max-width:760px),(hover:none),(prefers-reduced-motion:reduce)');
 
   function basitKur(){
     // mobil: sessiz döngü, scroll bağı yok, bölümler görünür olunca belirir
