@@ -120,8 +120,19 @@ a{color:inherit}
 .baglar .tutamak{display:none}
 @media (max-width:1180px){.baglar{grid-template-columns:repeat(2,1fr)}}
 
-.ipucu{position:absolute;bottom:9vh;left:50%;transform:translateX(-50%);font-size:11px;letter-spacing:.24em;
-  text-transform:uppercase;color:var(--soluk);transition:opacity .4s}
+.ipucu{position:absolute;bottom:10vh;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:6px;
+  padding:10px 18px 8px;border-radius:16px;background:#0a0f24b3;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px);
+  font-size:13px;letter-spacing:.12em;text-transform:uppercase;color:#f4efe6;transition:opacity .5s;pointer-events:none}
+.ipucu svg{width:20px;height:20px;stroke:#d8b46a;fill:none;stroke-width:2;animation:sek 1.4s ease-in-out infinite}
+@keyframes sek{0%,100%{transform:translateY(-3px)}50%{transform:translateY(4px)}}
+
+.dinle{position:fixed;right:20px;bottom:20px;z-index:20;display:flex;align-items:center;gap:8px;padding:11px 16px;border-radius:99px;
+  border:1px solid var(--altin);background:var(--gece);color:var(--yazi);font:inherit;font-size:14px;cursor:pointer;
+  box-shadow:0 10px 30px -10px #0008}
+.dinle svg{width:18px;height:18px;fill:var(--altin)}
+.dinle.caliyor{animation:nabiz 1.6s ease-out infinite}
+@keyframes nabiz{0%{box-shadow:0 0 0 0 #d8b46a88}100%{box-shadow:0 0 0 14px #d8b46a00}}
+@media (prefers-reduced-motion:reduce){.ipucu svg,.dinle.caliyor{animation:none}}
 
 .tema{margin-top:14px;background:none;border:1px solid var(--cizgi);color:var(--soluk);border-radius:99px;padding:6px 14px;font:inherit;font-size:13px;cursor:pointer}
 .son p{max-width:62ch;margin:0 auto 8px}
@@ -161,7 +172,7 @@ a{color:inherit}
       <video id="video" muted playsinline preload="auto" poster="medya/kare_3.jpg" aria-label="Lara Su Karayel'in yapay zeka ile üretilmiş tanıtım videosu (sessiz)"></video>
     </div>
     <div class="ilerleme" aria-hidden="true"><i id="cubuk"></i></div>
-    <div class="ipucu" id="ipucu">Kaydır</div>
+    <div class="ipucu" id="ipucu" aria-hidden="true">Kaydır, Lara yürüsün<svg viewBox="0 0 24 24"><path d="M6 9l6 6 6-6"/></svg></div>
 
     <section class="bolum sol" data-bas="0" data-bit=".34">
       <div class="etiket belir">01 · Sabah</div>
@@ -208,6 +219,9 @@ a{color:inherit}
     </section>
   </div>
 </main>
+
+<button class="dinle" id="dinle" type="button" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9v6h4l5 4V5L8 9H4Zm12.5 3a4.5 4.5 0 0 0-2.5-4v8a4.5 4.5 0 0 0 2.5-4Zm-2.5-8.8v2.1a7 7 0 0 1 0 13.4v2.1a9 9 0 0 0 0-17.6Z"/></svg><span id="dinleYazi">Lara'yı dinle</span></button>
+<audio id="ses" src="medya/karsilama.mp3" preload="none"></audio>
 
 <footer class="son">
   <p><strong>Lara Su Karayel gerçek bir kişi değildir;</strong> bu hesaplardaki görüntü ve sesler yapay zeka ile üretilir.</p>
@@ -273,6 +287,12 @@ a{color:inherit}
 
   if(basit.matches) basitKur(); else scrollKur();
   basit.addEventListener&&basit.addEventListener('change',function(){location.reload()});
+
+  // sesli karşılama: kaydırmadan bağımsız, dokununca çalar
+  var ses=document.getElementById('ses'), dinle=document.getElementById('dinle'), yazi=document.getElementById('dinleYazi');
+  function durum(c){dinle.classList.toggle('caliyor',c);dinle.setAttribute('aria-pressed',c);yazi.textContent=c?'Durdur':"Lara'yı dinle";}
+  dinle.addEventListener('click',function(){ if(ses.paused){ses.currentTime=0;var p=ses.play();if(p&&p.catch)p.catch(function(){});durum(true)} else {ses.pause();durum(false)} });
+  ses.addEventListener('ended',function(){durum(false)});
 })();
 </script>
 <script>
