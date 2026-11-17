@@ -141,8 +141,27 @@ a{color:inherit}
 .son strong{color:var(--yazi);font-weight:500}
 .son a{color:var(--altin)}
 
-/* ---------- mobil ve hareketi azalt: scroll bağı yok ---------- */
-@media (max-width:760px),(hover:none),(prefers-reduced-motion:reduce){
+/* ---------- dar ekran ve dokunmatik: yine kaydırmaya bağlı, video tam ekran, yazı altta üstüne ---------- */
+@media (prefers-reduced-motion:no-preference) and (max-width:760px),(prefers-reduced-motion:no-preference) and (hover:none),(prefers-reduced-motion:no-preference) and (max-aspect-ratio:7/5){
+  .sabit{height:100vh;height:100svh}
+  .pencere{height:100%;width:100%;aspect-ratio:auto;border-radius:0;box-shadow:none}
+  .pencere video{object-position:50% 20%}
+  .ilerleme{display:none}
+  .ipucu{top:40%;bottom:auto;white-space:nowrap}
+  .bolum{top:auto;bottom:0;left:0!important;right:0!important;width:auto;transform:none;
+    padding:80px max(20px,calc(50% - 300px)) calc(26px + env(safe-area-inset-bottom));
+    background:linear-gradient(to bottom,#0a0f2400,#0a0f24d0 40%,#0a0f24f2);color:#f4efe6}
+  .bolum h2,.bolum h1{font-size:32px}
+  .bolum p{color:#e6e0ef;font-size:15px;margin-top:12px;max-width:none}
+  .etiket{margin-bottom:10px;color:#d8b46a}
+  .baglar{grid-template-columns:repeat(2,1fr);gap:8px;margin-top:16px}
+  .baglar a{min-height:44px;background:#0a0f2466;border-color:#ffffff33;color:#f4efe6}
+  .serit{padding:12px 16px;background:var(--gece);font-size:11px;letter-spacing:.12em}
+  .rozet{white-space:nowrap;padding:4px 10px;letter-spacing:.08em}
+  .dinle{top:58px;bottom:auto;right:12px;padding:8px 12px;font-size:13px}
+}
+/* ---------- hareketi azalt: scroll bağı yok ---------- */
+@media (prefers-reduced-motion:reduce){
   .sahne{height:auto}
   .sabit{position:relative;height:auto;display:block;padding:76px 16px 0}
   .pencere{height:auto;width:100%;max-width:420px;margin:0 auto;transform:none!important}
@@ -239,7 +258,7 @@ a{color:inherit}
       cubuk=document.getElementById('cubuk'), ipucu=document.getElementById('ipucu'),
       pencere=document.getElementById('pencere'),
       bolumler=[].slice.call(document.querySelectorAll('.bolum'));
-  var basit=matchMedia('(max-width:760px),(hover:none),(prefers-reduced-motion:reduce)');
+  var basit=matchMedia('(prefers-reduced-motion:reduce)');
 
   function basitKur(){
     // mobil: sessiz döngü, scroll bağı yok, bölümler görünür olunca belirir
@@ -254,7 +273,9 @@ a{color:inherit}
     // tüm videoyu belleğe al: geri sarma takılmasın
     fetch('medya/lara_scroll.mp4').then(function(r){return r.blob()}).then(function(b){
       video.src=URL.createObjectURL(b);
-      video.addEventListener('loadedmetadata',function(){sure=video.duration||sure;hazir=true},{once:true});
+      video.addEventListener('loadedmetadata',function(){sure=video.duration||sure;hazir=true;
+        // iOS Safari: kare çizsin diye bir kez oynat-durdur (sessiz)
+        video.muted=true;var pp=video.play();if(pp&&pp.then)pp.then(function(){video.pause()}).catch(function(){})},{once:true});
     }).catch(function(){video.src='medya/lara_scroll.mp4';hazir=true});
 
     function ilerleme(){
@@ -283,6 +304,9 @@ a{color:inherit}
       if(hazir && !video.seeking && Math.abs(video.currentTime-simdi)>0.03){ try{video.currentTime=simdi}catch(e){} }
       requestAnimationFrame(boya);
     }
+    var kisa=document.querySelector('a[href="#hesaplar"]');
+    if(kisa)kisa.addEventListener('click',function(e){e.preventDefault();
+      scrollTo({top:sahne.offsetTop+(sahne.offsetHeight-innerHeight)*0.95,behavior:'smooth'})});
     addEventListener('scroll',bolumleriGuncelle,{passive:true});
     addEventListener('resize',bolumleriGuncelle);
     bolumleriGuncelle();
