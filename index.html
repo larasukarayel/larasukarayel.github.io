@@ -142,7 +142,7 @@ a{color:inherit}
 .son a{color:var(--altin)}
 
 /* ---------- mobil ve hareketi azalt: scroll bağı yok ---------- */
-@media (max-width:760px),(prefers-reduced-motion:reduce){
+@media (max-width:760px),(hover:none),(max-aspect-ratio:7/5),(prefers-reduced-motion:reduce){
   .sahne{height:auto}
   .sabit{position:relative;height:auto;display:block;padding:76px 16px 0}
   .pencere{height:auto;width:100%;max-width:420px;margin:0 auto;transform:none!important}
@@ -154,6 +154,10 @@ a{color:inherit}
   .baglar{grid-template-columns:repeat(2,1fr)}
   .serit{padding:12px 16px;background:var(--gece);font-size:11px;letter-spacing:.12em}
   .rozet{white-space:nowrap;padding:4px 10px;letter-spacing:.08em}
+  .pencere{height:62vh;height:62svh;width:auto;max-width:100%}
+  .baglar a{min-height:44px}
+  .son{padding-bottom:110px}
+  #hesaplar{scroll-margin-top:64px}
 }
 @media (prefers-reduced-motion:reduce){
   .satir>span,.belir{transform:none!important;opacity:1!important;transition:none}
@@ -162,7 +166,7 @@ a{color:inherit}
 </head>
 <body>
 <header class="serit">
-  <span>@larasukarayel</span>
+  <a href="#hesaplar">@larasukarayel ↓</a>
   <span class="rozet">Yapay zeka karakteri</span>
 </header>
 
@@ -192,7 +196,7 @@ a{color:inherit}
       <p class="belir" style="--i:3">Gezegen konumları NASA JPL tabanlı veriyle hesaplanır, her iddia yayından önce doğrulanır. Yorumlar eğlence amaçlıdır.</p>
     </section>
 
-    <section class="bolum sag" data-bas=".88" data-bit="1.01">
+    <section class="bolum sag" id="hesaplar" data-bas=".88" data-bit="1.01">
       <div class="etiket belir">04 · Takip et</div>
       <h1><span class="satir"><span style="--i:1">Lara Su Karayel</span></span></h1>
       <p class="belir" style="--i:2">@larasukarayel · altı platformda</p>
@@ -235,11 +239,11 @@ a{color:inherit}
       cubuk=document.getElementById('cubuk'), ipucu=document.getElementById('ipucu'),
       pencere=document.getElementById('pencere'),
       bolumler=[].slice.call(document.querySelectorAll('.bolum'));
-  var basit=matchMedia('(max-width:760px),(prefers-reduced-motion:reduce)');
+  var basit=matchMedia('(max-width:760px),(hover:none),(max-aspect-ratio:7/5),(prefers-reduced-motion:reduce)');
 
   function basitKur(){
     // mobil: sessiz döngü, scroll bağı yok, bölümler görünür olunca belirir
-    video.src='medya/lara_dongu.mp4'; video.loop=true; video.autoplay=true;
+    video.src='medya/lara_dongu.mp4'; video.muted=true; video.loop=true; video.autoplay=true;
     var p=video.play(); if(p&&p.catch)p.catch(function(){});
     var io=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting)e.target.classList.add('aktif')})},{threshold:.25});
     bolumler.forEach(function(b){io.observe(b)});
